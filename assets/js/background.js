@@ -331,25 +331,9 @@ function draw() {
     setMatrixUniforms();
     setLightUniforms(localLightPosition3,lAmbient,lDiffuse,lSpecular);
 
-    var fog = document.getElementById("fog").checked;
-
-    if ((document.getElementById("polygon").checked) || (document.getElementById("wirepoly").checked))
-    {
-      setMaterialUniforms(shininess,kAmbient,kTerrainDiffuse,kSpecular, true, fog);
-      myTerrain.drawTriangles();
-    }
-
-    if(document.getElementById("wirepoly").checked)
-    {
-      setMaterialUniforms(shininess,kAmbient,kEdgeBlack,kSpecular, false, fog);
-      myTerrain.drawEdges();
-    }
-
-    if(document.getElementById("wireframe").checked)
-    {
-      setMaterialUniforms(shininess,kAmbient,kEdgeWhite,kSpecular, false, fog);
-      myTerrain.drawEdges();
-    }
+    var fog = true;
+    setMaterialUniforms(shininess,kAmbient,kTerrainDiffuse,kSpecular, true, fog);
+    myTerrain.drawTriangles();
     mvPopMatrix();
 }
 
