@@ -34,7 +34,7 @@ var myTerrain;
 var position = vec3.fromValues(-1.25,-0.25,-1.5);
 
 /** @global An object holding the speed of the player */
-var speed = 0.0005;
+var speed = 0.0;
 
 /** @global An object holding the rotation of the player */
 var rotation = quat.fromValues(0.0,0.2,0.0,1.0);
@@ -303,38 +303,38 @@ function setupBuffers() {
  * Draw call that applies matrix transformations to model and draws model in frame
  */
 function draw() {
-    //console.log("function draw()")
-    var transformVec = vec3.create();
+  //console.log("function draw()")
+  var transformVec = vec3.create();
 
-    gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+  gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    // We'll use perspective
-    mat4.perspective(pMatrix,
-      degToRad(45),
-      gl.viewportWidth / gl.viewportHeight,
-      0.1, 200.0);
+  // We'll use perspective
+  mat4.perspective(pMatrix,
+    degToRad(45),
+    gl.viewportWidth / gl.viewportHeight,
+    0.1, 200.0);
 
-    var viewPt = vec3.create();
-    vec3.add(viewPt, position, viewDir);
-    mat4.lookAt(mvMatrix,position,viewPt,upDir);
+  var viewPt = vec3.create();
+  vec3.add(viewPt, position, viewDir);
+  mat4.lookAt(mvMatrix,position,viewPt,upDir);
 
-    // Draw Terrain
-    mvPushMatrix();
-    vec3.set(transformVec,0.0,-0.25,-2.0);
-    mat4.translate(mvMatrix, mvMatrix,transformVec);
+  // Draw Terrain
+  mvPushMatrix();
+  vec3.set(transformVec,0.0,-0.25,-2.0);
+  mat4.translate(mvMatrix, mvMatrix,transformVec);
 
-    var localLightPosition4 = vec4.fromValues(lightPosition[0], lightPosition[1], lightPosition[2], 1.0);
-    vec3.transformMat4(localLightPosition4, localLightPosition4, mvMatrix);
-    var localLightPosition3 = vec3.fromValues(localLightPosition4[0], localLightPosition4[1], localLightPosition4[2]);
+  var localLightPosition4 = vec4.fromValues(lightPosition[0], lightPosition[1], lightPosition[2], 1.0);
+  vec3.transformMat4(localLightPosition4, localLightPosition4, mvMatrix);
+  var localLightPosition3 = vec3.fromValues(localLightPosition4[0], localLightPosition4[1], localLightPosition4[2]);
 
-    setMatrixUniforms();
-    setLightUniforms(localLightPosition3,lAmbient,lDiffuse,lSpecular);
+  setMatrixUniforms();
+  setLightUniforms(localLightPosition3,lAmbient,lDiffuse,lSpecular);
 
-    var fog = true;
-    setMaterialUniforms(shininess,kAmbient,kTerrainDiffuse,kSpecular, true, fog);
-    myTerrain.drawTriangles();
-    mvPopMatrix();
+  var fog = true;
+  setMaterialUniforms(shininess,kAmbient,kTerrainDiffuse,kSpecular, true, fog);
+  myTerrain.drawTriangles();
+  mvPopMatrix();
 }
 
 //----------------------------------------------------------------------------------
@@ -360,6 +360,11 @@ function getTransformQuat(axis, rotation, degree) {
  */
  function startup() {
   canvas = document.getElementById("myGLCanvas");
+
+  ctx = canvas.getContext('webgl')
+  ctx.canvas.width  = window.innerWidth;
+  ctx.canvas.height = window.innerHeight;
+
   gl = createGLContext(canvas);
   setupShaders();
   setupBuffers();
@@ -405,7 +410,7 @@ function getTransformQuat(axis, rotation, degree) {
     }
   });
 
-  tick();
+  draw();
 }
 
 //----------------------------------------------------------------------------------
