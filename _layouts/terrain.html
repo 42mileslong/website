@@ -92,6 +92,11 @@ layout:	analytics
 <script src="/assets/js/Terrain.js"></script>
 <script src="/assets/js/background.js"></script>
 <body style="margin: 0px" onload="startup();">
- <canvas id="myGLCanvas" width="800" height="800"></canvas>
-  {{ content }}
+  <div id="wrapper">
+    <div style="position: absolute; left:0px; top:0px; width:100%; height: 100%">
+      <canvas id="myGLCanvas" width="800" height="800"></canvas>
+    </div>
+    <div style="position: absolute; z-index: 1">
+      {{ content }}
+    </div>
 </body>
